@@ -1,4 +1,6 @@
-use bevy::{camera::ScalingMode, prelude::*};
+use bevy::{camera::ScalingMode, image::ImageSamplerDescriptor, prelude::*};
+
+use flappy_bird::*;
 
 #[derive(Component)]
 #[require(Gravity(1000.), Velocity)]
@@ -11,12 +13,12 @@ struct Gravity(f32);
 struct Velocity(f32);
 
 
-pub const CANVAS_SIZE: Vec2 = Vec2::new(480., 270.);
-pub const PLAYER_SIZE: f32 = 25.0;
-
 fn main() {
   App::new()
-    .add_plugins(DefaultPlugins)
+    .add_plugins(DefaultPlugins.set(ImagePlugin {
+      default_sampler: ImageSamplerDescriptor::nearest(),
+    }))
+    .add_plugins(PipePlugin)
     .add_systems(Startup, startup)
     .add_systems(Update, bird_control)
     .add_systems(FixedUpdate, (gravity, check_in_bounds))
